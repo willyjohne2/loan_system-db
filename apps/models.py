@@ -3,7 +3,7 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
@@ -21,7 +21,7 @@ class Admins(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'admins'
 
 
@@ -36,7 +36,7 @@ class AuditLogs(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'audit_logs'
 
 
@@ -50,7 +50,7 @@ class LoanProducts(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'loan_products'
 
 
@@ -65,7 +65,7 @@ class Loans(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'loans'
 
 
@@ -77,7 +77,7 @@ class Notifications(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'notifications'
 
 
@@ -90,7 +90,7 @@ class RepaymentSchedule(models.Model):
     is_paid = models.BooleanField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'repayment_schedule'
 
 
@@ -103,7 +103,7 @@ class Repayments(models.Model):
     reference_code = models.TextField(unique=True, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'repayments'
 
 
@@ -115,7 +115,7 @@ class Transactions(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'transactions'
 
 
@@ -130,7 +130,7 @@ class UserProfiles(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'user_profiles'
 
 
@@ -144,5 +144,5 @@ class Users(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users'
