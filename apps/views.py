@@ -35,16 +35,32 @@ class LoginView(views.APIView):
         email = request.data.get("email")
         password = request.data.get("password")
 
+        # Handle Render/DRF Browsable API "content" wrapper
+        if not email and "_content" in request.data:
+            try:
+                import json
+
+                content_data = json.loads(request.data.get("_content"))
+                email = content_data.get("email")
+                password = content_data.get("password")
+                print(f"DEBUG: Unwrapped from _content: email={email}")
+            except Exception as e:
+                print(f"DEBUG: Failed to unwrap _content: {e}")
+
         # Sometimes Browsable API sends data in a nested QueryDict
-        if not email and "email" in request.POST:
-            email = request.POST.get("email")
-        if not password and "password" in request.POST:
-            password = request.POST.get("password")
+        if not email and isinstance(request.data, dict) and "email" in request.data:
+            email = request.data.get("email")
+        if (
+            not password
+            and isinstance(request.data, dict)
+            and "password" in request.data
+        ):
+            password = request.data.get("password")
 
         if not email or not password:
             return Response(
                 {
-                    "error": f"Email ({email}) and password (hidden) are required. Received: {list(request.data.keys())}"
+                    "error": f"Email ({email}) and password (hidden) are required. Received keys: {list(request.data.keys())}"
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
