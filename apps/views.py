@@ -32,8 +32,21 @@ class LoginView(views.APIView):
         email = request.data.get("email")
         password = request.data.get("password")
 
+        if not email or not password:
+            return Response(
+                {"error": "Email and password are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
-            admin = Admins.objects.get(email=email)
+            # Case-insensitive lookup
+            admin = Admins.objects.filter(email__iexact=email).first()
+            if not admin:
+                return Response(
+                    {"error": "Invalid credentials"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
             if admin.is_blocked:
                 return Response(
                     {"error": "Account is blocked"}, status=status.HTTP_403_FORBIDDEN
