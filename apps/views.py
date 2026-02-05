@@ -29,12 +29,23 @@ class LoginView(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        # Debug: Print what we received to the console
+        print(f"DEBUG: Received data: {request.data}")
+
         email = request.data.get("email")
         password = request.data.get("password")
 
+        # Sometimes Browsable API sends data in a nested QueryDict
+        if not email and "email" in request.POST:
+            email = request.POST.get("email")
+        if not password and "password" in request.POST:
+            password = request.POST.get("password")
+
         if not email or not password:
             return Response(
-                {"error": "Email and password are required"},
+                {
+                    "error": f"Email ({email}) and password (hidden) are required. Received: {list(request.data.keys())}"
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
